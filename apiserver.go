@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type Student struct {
@@ -122,5 +123,11 @@ func routing(res http.ResponseWriter, req *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", routing)
-	log.Fatal(http.ListenAndServe(":8081", mux))
+
+	server := http.Server{
+		Addr: "localhost:8081", 
+		Handler: mux, 
+		WriteTimeout: 10 * time.Second,
+	}
+	log.Fatal(server.ListenAndServe())
 }
